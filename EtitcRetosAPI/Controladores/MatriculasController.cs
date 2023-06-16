@@ -26,15 +26,22 @@ namespace EtitcRetosAPI.Controladores
         public async Task<ActionResult<IEnumerable<MatriculaMV>>> GetMatriculas()
         {
             var matriculas = await _context.Matriculas.ToListAsync();
+            var estudiantes = await _context.Estudiantes.ToListAsync();
+            var personas = await _context.Personas.ToListAsync();
 
-            var query = from mat in matriculas
+            var query = from mat in matriculas 
+                        join est in estudiantes on mat.IdMatricula equals est.MatriculaId into MatriculaEstudiante
+                        from matest in MatriculaEstudiante.DefaultIfEmpty()
+                        join per in personas on matest?.PersonaId equals per.IdPersona into PersonaEstudiante
+                        from perest in PersonaEstudiante.DefaultIfEmpty()
                         select new MatriculaMV
                         {
                             IdMatricula = mat.IdMatricula,
                             Codigo = mat.Codigo,
                             Estado = mat.Estado,
                             ActivaDesde = mat.ActivaDesde,
-                            ActivaHasta = mat.Vencimiento
+                            ActivaHasta = mat.Vencimiento,
+                            Estudiante = perest?.Nombre?? null
                         };
             return query.ToList();
         }
@@ -51,6 +58,36 @@ namespace EtitcRetosAPI.Controladores
             }
 
             return matricula;
+        }
+
+        [HttpGet("codigo/{codigo}")]
+        public async Task<ActionResult<Matricula>> GetMatricula(string codigo)
+        {
+            var matricula = await _context.Matriculas.Where(mat => mat.Codigo == codigo).FirstOrDefaultAsync();
+
+            if (matricula == null)
+            {
+                return NotFound();
+            }
+
+            return matricula;
+        }
+
+        [HttpGet("libres")]
+        public async Task<ActionResult<IEnumerable<Matricula>>> GetMatriculasLibres()
+        {
+            var estudiantes = await _context.Estudiantes.ToListAsync();
+            List<int?> ids = new();
+            estudiantes.ForEach((est) => { ids.Add(est.MatriculaId); });
+
+            var matriculas = await _context.Matriculas.Where(mat => !ids.Contains(mat.IdMatricula)).ToListAsync();
+
+            if (matriculas == null)
+            {
+                return NotFound();
+            }
+
+            return matriculas;
         }
 
         // PUT: api/Matriculas/5

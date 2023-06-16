@@ -7,5 +7,6 @@
         public string? Estado { get; set; }
         public DateTime? ActivaDesde { get; set; }
         public DateTime? ActivaHasta { get; set; }
+        public string? Estudiante { get; set; }
     }
 }

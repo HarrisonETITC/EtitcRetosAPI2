@@ -39,7 +39,8 @@ namespace EtitcRetosAPI.Controladores
                             IdEstudiante = est.IdEstudiante,
                             Semestre = est.Semestre,
                             Nombre = per.Nombre,
-                            Matricula = mat.Codigo
+                            Matricula = mat.Codigo,
+                            Estado = per.Estado
                         };
 
             return query.ToList();
