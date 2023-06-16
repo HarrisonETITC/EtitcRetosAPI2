@@ -333,12 +333,12 @@ namespace EtitcRetosAPI.Models
                 entity.Property(e => e.MaxIntentos).HasColumnName("maxIntentos");
 
                 entity.Property(e => e.Privacidad)
-                    .HasMaxLength(1)
+                    .HasMaxLength(10)
                     .IsUnicode(false)
                     .HasColumnName("privacidad");
 
                 entity.Property(e => e.RangoSemestral)
-                    .HasMaxLength(4)
+                    .HasMaxLength(10)
                     .IsUnicode(false)
                     .HasColumnName("rangoSemestral");
 
@@ -362,6 +362,11 @@ namespace EtitcRetosAPI.Models
                 entity.ToTable("Rol");
 
                 entity.Property(e => e.IdRol).HasColumnName("id_rol");
+
+                entity.Property(e => e.Estado)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasColumnName("estado");
 
                 entity.Property(e => e.Registro)
                     .HasColumnType("datetime")

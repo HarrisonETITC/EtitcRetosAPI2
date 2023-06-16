@@ -27,13 +27,17 @@ namespace EtitcRetosAPI.Controladores
         {
             var roles = await _context.Rols.ToListAsync();
             var personas = await _context.Personas.ToListAsync();
+            var empresas = await _context.Empresas.ToListAsync();
+
 
             var query = from rol in roles
                         select new RolMV
                         {
                             IdRol = rol.IdRol,
                             TipoUsuario = rol.TipoUsuario,
-                            Registro = rol.Registro
+                            Registro = rol.Registro,
+                            Usado = rol.TipoUsuario == "Empresa"? empresas.Count : personas?.Count(per => per.RolId == rol.IdRol) ?? 0,
+                            Estado = rol.Estado
                         };
             return query.ToList();
         }
