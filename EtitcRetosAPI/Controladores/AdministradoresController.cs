@@ -36,7 +36,8 @@ namespace EtitcRetosAPI.Controladores
                         {
                             IdAdministrador = adm.IdAdministrador,
                             Nombre = per.Nombre,
-                            Cargo = adm.Cargo
+                            Cargo = adm.Cargo,
+                            Estado = per.Estado
                         };
             return query.ToList();
         }
