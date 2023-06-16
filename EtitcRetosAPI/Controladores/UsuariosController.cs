@@ -30,11 +30,14 @@ namespace EtitcRetosAPI.Controladores
         {
             var usuarios = await _context.Usuarios.ToListAsync();
             var personas = await _context.Personas.ToListAsync();
-            var query = from ur in usuarios join pa in personas on ur.IdUsuario equals pa.UsuarioId select new UsuarioVM
+            var query = from ur in usuarios join pa in personas on ur.IdUsuario equals pa.UsuarioId into UsuarioPersona
+                        from userp in UsuarioPersona.DefaultIfEmpty()
+                        select new UsuarioVM
             {
                 IdUsuario = ur.IdUsuario,
                 Correo = ur.Correo,
-                Persona = pa.Nombre
+                Persona = userp?.Nombre?? null,
+                Foto = ur.Fotoperfil
             };
 
             return query.ToList();
@@ -78,6 +81,23 @@ namespace EtitcRetosAPI.Controladores
             var json = JsonSerializer.Serialize(usuario, options);
 
             return Content(json, "application/json");
+        }
+
+        // GET: api/Usuarios/5
+        [HttpGet("sinpersona")]
+        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuariosSinPersona()
+        {
+            var personas = await _context.Personas.Where(per => per.UsuarioId != null).ToListAsync();
+            List<int?> llaves = new();
+            personas.ForEach((persona) => { llaves.Add(persona.UsuarioId); });
+            var usuario = await _context.Usuarios.Where(ur => !llaves.Contains(ur.IdUsuario)).ToListAsync();
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return usuario;
         }
 
         // PUT: api/Usuarios/5

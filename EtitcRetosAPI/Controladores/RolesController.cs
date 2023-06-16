@@ -52,6 +52,19 @@ namespace EtitcRetosAPI.Controladores
             return rol;
         }
 
+        [HttpGet("nombre/{nombre}")]
+        public async Task<ActionResult<Rol>> GetRolConNombre(string nombre)
+        {
+            var rol = await _context.Rols.Where(r => r.TipoUsuario == nombre).FirstOrDefaultAsync();
+
+            if (rol == null)
+            {
+                return NotFound();
+            }
+
+            return rol;
+        }
+
         [HttpGet("usuario/{usuario}")]
         public async Task<ActionResult<RolMV>> GetRolUsuario(int usuario)
         {

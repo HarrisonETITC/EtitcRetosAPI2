@@ -30,8 +30,10 @@ namespace EtitcRetosAPI.Controladores
             var roles = await _context.Rols.ToListAsync();
 
             var query = from per in personas
-                        join ur in usuarios on per.UsuarioId equals ur.IdUsuario
-                        join rol in roles on per.RolId equals rol.IdRol
+                        join ur in usuarios on per.UsuarioId equals ur.IdUsuario into PersonaUsuario
+                        from peruser in PersonaUsuario.DefaultIfEmpty()
+                        join rol in roles on per.RolId equals rol.IdRol into PersonaRol
+                        from perrol in PersonaRol.DefaultIfEmpty()
                         select new PersonaMV
                         {
                             IdPersona = per.IdPersona,
@@ -39,8 +41,8 @@ namespace EtitcRetosAPI.Controladores
                             Identificacion = per.Identificacion,
                             Tipo = per.TipoIdentificacion,
                             Telefono = per.Telefono,
-                            Correo = ur.Correo,
-                            Rol = rol.TipoUsuario,
+                            Correo = peruser?.Correo?? null,
+                            Rol = perrol?.TipoUsuario?? null,
                             Estado = per.Estado
                         };
             return query.ToList();
@@ -71,6 +73,19 @@ namespace EtitcRetosAPI.Controladores
             }
 
             return persona;
+        }
+
+        [HttpGet("sinrol")]
+        public async Task<ActionResult<IEnumerable<Persona>>> GetPersonasSinRol()
+        {
+            var personas = await _context.Personas.Where(per => per.RolId == null).ToListAsync();
+
+            if (personas == null)
+            {
+                return NotFound();
+            }
+
+            return personas;
         }
 
         // PUT: api/Personas/5
