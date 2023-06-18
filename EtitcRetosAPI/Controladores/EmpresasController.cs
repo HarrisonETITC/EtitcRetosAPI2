@@ -33,7 +33,8 @@ namespace EtitcRetosAPI.Controladores
                             IdEmpresa = emp.IdEmpresa,
                             Nombre = emp.Nombre,
                             Sector = emp.Sector,
-                            NIT = emp.Nit
+                            NIT = emp.Nit,
+                            Estado = emp.Estado,
                         };
             return query.ToList();
         }

@@ -91,6 +91,11 @@ namespace EtitcRetosAPI.Models
 
                 entity.Property(e => e.IdEmpresa).HasColumnName("id_empresa");
 
+                entity.Property(e => e.Estado)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasColumnName("estado");
+
                 entity.Property(e => e.Nit)
                     .HasMaxLength(50)
                     .IsUnicode(false)

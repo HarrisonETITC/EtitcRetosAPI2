@@ -14,7 +14,8 @@ namespace EtitcRetosAPI.Models
         public string? Nombre { get; set; }
         public string? Sector { get; set; }
         public string? Nit { get; set; }
+        public string? Estado { get; set; }
 
-        public virtual ICollection<SolicitudReto> SolicitudRetos { get; set; }
+        public virtual ICollection<SolicitudReto>? SolicitudRetos { get; set; }
     }
 }
