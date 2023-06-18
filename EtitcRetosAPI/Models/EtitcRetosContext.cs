@@ -201,7 +201,7 @@ namespace EtitcRetosAPI.Models
                     .HasColumnName("codigo");
 
                 entity.Property(e => e.Estado)
-                    .HasMaxLength(20)
+                    .HasMaxLength(1)
                     .IsUnicode(false)
                     .HasColumnName("estado");
 
@@ -443,6 +443,11 @@ namespace EtitcRetosAPI.Models
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("correo");
+
+                entity.Property(e => e.Estado)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasColumnName("estado");
 
                 entity.Property(e => e.Fotoperfil)
                     .HasColumnType("text")

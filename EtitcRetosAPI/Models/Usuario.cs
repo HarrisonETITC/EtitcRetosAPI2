@@ -10,6 +10,7 @@ namespace EtitcRetosAPI.Models
         public string? Contraseña { get; set; }
         public DateTime? Registro { get; set; }
         public string? Fotoperfil { get; set; }
+        public string? Estado { get; set; }
 
         public virtual ICollection<Persona>? Personas { get; set; }
     }

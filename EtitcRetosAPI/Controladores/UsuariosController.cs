@@ -30,13 +30,20 @@ namespace EtitcRetosAPI.Controladores
         {
             var usuarios = await _context.Usuarios.ToListAsync();
             var personas = await _context.Personas.ToListAsync();
-            var query = from ur in usuarios join pa in personas on ur.IdUsuario equals pa.UsuarioId into UsuarioPersona
+            var roles = await _context.Rols.ToListAsync();
+
+            var query = from ur in usuarios 
+                        join pa in personas on ur.IdUsuario equals pa.UsuarioId into UsuarioPersona
                         from userp in UsuarioPersona.DefaultIfEmpty()
+                        join rol in roles on userp?.RolId equals rol.IdRol into PersonaRol
+                        from rolp in PersonaRol.DefaultIfEmpty()
                         select new UsuarioVM
             {
                 IdUsuario = ur.IdUsuario,
                 Correo = ur.Correo,
                 Persona = userp?.Nombre?? null,
+                Rol = rolp?.TipoUsuario?? null,
+                Estado = ur.Estado,
                 Foto = ur.Fotoperfil
             };
 
