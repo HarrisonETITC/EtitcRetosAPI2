@@ -222,6 +222,11 @@ namespace EtitcRetosAPI.Models
                     .HasColumnType("text")
                     .HasColumnName("descripcion");
 
+                entity.Property(e => e.Estado)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasColumnName("estado");
+
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(50)
                     .IsUnicode(false)

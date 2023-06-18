@@ -32,6 +32,7 @@ namespace EtitcRetosAPI.Controladores
                         {
                             IdModulo = mod.IdModulo,
                             Nombre = mod.Nombre,
+                            Estado = mod.Estado,
                             Descripcion = mod.Descripcion,
                         };
             return query.ToList();

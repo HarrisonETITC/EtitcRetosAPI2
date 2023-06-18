@@ -13,7 +13,8 @@ namespace EtitcRetosAPI.Models
         public int IdModulo { get; set; }
         public string? Nombre { get; set; }
         public string? Descripcion { get; set; }
+        public string? Estado { get; set; }
 
-        public virtual ICollection<ModuloPermiso> ModuloPermisos { get; set; }
+        public virtual ICollection<ModuloPermiso>? ModuloPermisos { get; set; }
     }
 }
