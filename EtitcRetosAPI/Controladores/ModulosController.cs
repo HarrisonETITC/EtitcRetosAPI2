@@ -38,6 +38,18 @@ namespace EtitcRetosAPI.Controladores
             return query.ToList();
         }
 
+        [HttpGet("rol/{rolid}")]
+        public async Task<ActionResult<IEnumerable<Modulo>>> GetModulosByRol(int rolid)
+        {
+            var modulopermisos = await _context.ModuloPermisos.Where(mp => mp.RolId == rolid).ToListAsync();
+
+            List<int?> modulosId = new();
+            modulopermisos.ForEach((mp) => { modulosId.Add(mp.ModuloId); });
+
+            var modulos = await _context.Modulos.ToListAsync();
+            return modulosId.Count == 0 ? modulos : modulos.Where(m => !modulosId.Contains(m.IdModulo)).ToList();
+        }
+
         // GET: api/Moduloes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Modulo>> GetModulo(int id)
