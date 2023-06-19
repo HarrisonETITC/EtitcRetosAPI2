@@ -54,10 +54,120 @@ namespace EtitcRetosAPI.Controladores
                             Estado = intent.Estado,
                             Adjuntos = intent.Adjuntos,
                             Retador = estudiantePersona?.Nombre ?? "Sin Retador",
-                            Calificador = docentePersona?.Nombre ?? "Sin Calificador",
+                            Calificador = intent.Nota == null? "Sin Calificador" : docentePersona?.Nombre ?? "ADMIN",
                             Nota = intent.Nota,
                             Observaciones = intent.Observaciones,
                             RetoTitulo = retoObj?.Titulo,
+                        };
+
+            return query.ToList();
+        }
+
+        [HttpGet("realizados/{idestudiante}")]
+        public async Task<ActionResult<IEnumerable<IntentoMV>>> GetIntentosRealizados(int idestudiante)
+        {
+            var intentos = await _context.Intentos.Where(intento => (intento.RegistradoPor != null && intento.RegistradoPor == idestudiante)).ToListAsync();
+            var docentes = await _context.Docentes.ToListAsync();
+            var estudiantes = await _context.Estudiantes.ToListAsync();
+            var retos = await _context.Retos.ToListAsync();
+            var personas = await _context.Personas.ToListAsync();
+
+            var query = from intent in intentos
+                        join doc in docentes on intent.CalificadoPor equals doc.IdDocente into docGroup
+                        from docente in docGroup.DefaultIfEmpty()
+                        join per2 in personas on docente?.PersonaId equals per2.IdPersona into per2Group
+                        from docentePersona in per2Group.DefaultIfEmpty()
+                        join est in estudiantes on intent.RegistradoPor equals est.IdEstudiante into estGroup
+                        from estudiante in estGroup.DefaultIfEmpty()
+                        join per1 in personas on estudiante?.PersonaId equals per1.IdPersona into per1Group
+                        from estudiantePersona in per1Group.DefaultIfEmpty()
+                        join reto in retos on intent.RetoId equals reto.IdReto into retoGroup
+                        from retoObj in retoGroup.DefaultIfEmpty()
+                        select new IntentoMV
+                        {
+                            IdIntento = intent.IdIntento,
+                            Registro = intent.Registro,
+                            Estado = intent.Estado,
+                            Adjuntos = intent.Adjuntos,
+                            Retador = estudiantePersona?.Nombre ?? "Sin Retador",
+                            Calificador = intent.Nota == null ? "Sin Calificador" : docentePersona?.Nombre ?? "ADMIN",
+                            Nota = intent.Nota,
+                            Observaciones = intent.Observaciones,
+                            RetoTitulo = retoObj?.Titulo,
+                        };
+
+            return query.ToList();
+        }
+
+        [HttpGet("docente/{iddocente}")]
+        public async Task<ActionResult<IEnumerable<IntentoMV>>> GetIntentosDocente(int iddocente)
+        {
+            var intentos = await _context.Intentos.ToListAsync();
+            var docentes = await _context.Docentes.ToListAsync();
+            var estudiantes = await _context.Estudiantes.ToListAsync();
+            var retos = await _context.Retos.ToListAsync();
+            var solicitudes = await _context.SolicitudRetos.Where(sol => sol.SolicitadoPor == iddocente).ToListAsync();
+            var personas = await _context.Personas.ToListAsync();
+
+            var query = from intent in intentos
+                        join doc in docentes on intent.CalificadoPor equals doc.IdDocente into docGroup
+                        from docente in docGroup.DefaultIfEmpty()
+                        join per2 in personas on docente?.PersonaId equals per2.IdPersona into per2Group
+                        from docentePersona in per2Group.DefaultIfEmpty()
+                        join est in estudiantes on intent.RegistradoPor equals est.IdEstudiante into estGroup
+                        from estudiante in estGroup.DefaultIfEmpty()
+                        join per1 in personas on estudiante?.PersonaId equals per1.IdPersona into per1Group
+                        from estudiantePersona in per1Group.DefaultIfEmpty()
+                        join reto in retos on intent.RetoId equals reto.IdReto
+                        join solicitud in solicitudes on reto.SolicitudId equals solicitud.IdSolicitudReto
+                        select new IntentoMV
+                        {
+                            IdIntento = intent.IdIntento,
+                            Registro = intent.Registro,
+                            Estado = intent.Estado,
+                            Adjuntos = intent.Adjuntos,
+                            Retador = estudiantePersona?.Nombre ?? "Sin Retador",
+                            Calificador = intent.Nota == null ? "Sin Calificador" : docentePersona?.Nombre ?? "ADMIN",
+                            Nota = intent.Nota,
+                            Observaciones = intent.Observaciones,
+                            RetoTitulo = reto?.Titulo,
+                        };
+
+            return query.ToList();
+        }
+
+        [HttpGet("empresa/{idempresa}")]
+        public async Task<ActionResult<IEnumerable<IntentoMV>>> GetIntentosEmpresa(int idempresa)
+        {
+            var intentos = await _context.Intentos.ToListAsync();
+            var docentes = await _context.Docentes.ToListAsync();
+            var estudiantes = await _context.Estudiantes.ToListAsync();
+            var retos = await _context.Retos.ToListAsync();
+            var solicitudes = await _context.SolicitudRetos.Where(sol => sol.SolicitudExterna == idempresa).ToListAsync();
+            var personas = await _context.Personas.ToListAsync();
+
+            var query = from intent in intentos
+                        join doc in docentes on intent.CalificadoPor equals doc.IdDocente into docGroup
+                        from docente in docGroup.DefaultIfEmpty()
+                        join per2 in personas on docente?.PersonaId equals per2.IdPersona into per2Group
+                        from docentePersona in per2Group.DefaultIfEmpty()
+                        join est in estudiantes on intent.RegistradoPor equals est.IdEstudiante into estGroup
+                        from estudiante in estGroup.DefaultIfEmpty()
+                        join per1 in personas on estudiante?.PersonaId equals per1.IdPersona into per1Group
+                        from estudiantePersona in per1Group.DefaultIfEmpty()
+                        join reto in retos on intent.RetoId equals reto.IdReto
+                        join solicitud in solicitudes on reto.SolicitudId equals solicitud.IdSolicitudReto
+                        select new IntentoMV
+                        {
+                            IdIntento = intent.IdIntento,
+                            Registro = intent.Registro,
+                            Estado = intent.Estado,
+                            Adjuntos = intent.Adjuntos,
+                            Retador = estudiantePersona?.Nombre ?? "Sin Retador",
+                            Calificador = intent.Nota == null ? "Sin Calificador" : docentePersona?.Nombre ?? "ADMIN",
+                            Nota = intent.Nota,
+                            Observaciones = intent.Observaciones,
+                            RetoTitulo = reto?.Titulo,
                         };
 
             return query.ToList();

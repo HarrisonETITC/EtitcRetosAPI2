@@ -53,7 +53,7 @@ namespace EtitcRetosAPI.Controladores
                             Estado = ret.Estado,
                             Privacidad = ret.Privacidad,
                             Realizado = intentos.Where(ito => ito.RetoId == ret.IdReto).Count(),
-                            CreadoPor = docper?.Nombre?? solemp?.Nombre?? null
+                            CreadoPor = docper?.Nombre?? solemp?.Nombre?? "ADMIN"
                         };
             return query.ToList();
         }
@@ -85,7 +85,7 @@ namespace EtitcRetosAPI.Controladores
                             Estado = ret.Estado,
                             Privacidad = ret.Privacidad,
                             Realizado = intentos.Where(ito => ito.RetoId == ret.IdReto).Count(),
-                            CreadoPor = docper?.Nombre?? null
+                            CreadoPor = docper?.Nombre?? "ADMIN"
                         };
             return query.ToList();
         }
@@ -114,7 +114,7 @@ namespace EtitcRetosAPI.Controladores
                             Estado = ret.Estado,
                             Privacidad = ret.Privacidad,
                             Realizado = intentos.Where(ito => ito.RetoId == ret.IdReto).Count(),
-                            CreadoPor = solemp?.Nombre?? null
+                            CreadoPor = solemp?.Nombre?? "ADMIN"
                         };
             return query.ToList();
         }
@@ -150,7 +150,7 @@ namespace EtitcRetosAPI.Controladores
                             Estado = ret.Estado,
                             Privacidad = ret.Privacidad,
                             Realizado = intentos.Where(ito => ito.RetoId == ret.IdReto).Count(),
-                            CreadoPor = docper?.Nombre ?? solemp?.Nombre ?? null
+                            CreadoPor = docper?.Nombre ?? solemp?.Nombre ?? "ADMIN"
                         };
             return query.ToList();
         }
@@ -180,6 +180,17 @@ namespace EtitcRetosAPI.Controladores
             }
 
             return reto;
+        }
+
+        [HttpGet("disponibles/{idestudiante}")]
+        public async Task<ActionResult<IEnumerable<Reto>>> GetRetosDisponibles(int idestudiante)
+        {
+            var intentos = await _context.Intentos.Where(intento => intento.RegistradoPor == idestudiante).ToListAsync();
+            List<int?> realizados = new();
+            intentos.ForEach((intento) => {realizados.Add(intento.RetoId); });
+
+            var retos = await _context.Retos.Where(ret => !realizados.Contains(ret.IdReto) && ret.Estado == "A").ToListAsync();
+            return retos;
         }
 
         // PUT: api/Retoes/5

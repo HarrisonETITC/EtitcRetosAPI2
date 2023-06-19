@@ -80,6 +80,33 @@ namespace EtitcRetosAPI.Controladores
             return Content(json, "application/json");
         }
 
+        [HttpGet("persona/{nombre}")]
+        public async Task<ActionResult<Docente>> GetDocentePersona(string nombre)
+        {
+            var persona = await _context.Personas.Where(per => per.Nombre == nombre).FirstOrDefaultAsync();
+            if (persona == null)
+            {
+                return NotFound();
+            }
+
+            var docente = await _context.Docentes.Where(doc => doc.PersonaId == persona.IdPersona).FirstOrDefaultAsync();
+
+            if (docente == null)
+            {
+                return NotFound();
+            }
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                MaxDepth = 10,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase// Opcional: Ajusta el límite de profundidad según sea necesario
+            };
+
+            var json = JsonSerializer.Serialize(docente, options);
+
+            return Content(json, "application/json");
+        }
+
         // PUT: api/Docentes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
