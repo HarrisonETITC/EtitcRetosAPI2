@@ -6,6 +6,7 @@
         public string? TipoUsuario { get; set; }
         public DateTime? Registro { get; set; }
         public int? Usado { get; set; }
+        public int? Permisos { get; set; }
         public string? Estado { get; set; }
     }
 }
