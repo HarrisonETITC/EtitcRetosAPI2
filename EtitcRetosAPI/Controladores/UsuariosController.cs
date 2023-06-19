@@ -107,6 +107,43 @@ namespace EtitcRetosAPI.Controladores
             return usuario;
         }
 
+        [HttpGet("info/{id}")]
+        public async Task<ActionResult<UsuarioVM>> GetInfoUsuario(int id)
+        {
+            var usuarios = await _context.Usuarios.Where(u => u.IdUsuario == id).ToListAsync();
+            var personas = await _context.Personas.ToListAsync();
+            var roles = await _context.Rols.ToListAsync();
+
+            var query = from user in usuarios
+                        join per in personas on user.IdUsuario equals per.UsuarioId
+                        join rol in roles on per.RolId equals rol.IdRol
+                        select new UsuarioVM
+                        {
+                            IdUsuario = user.IdUsuario,
+                            Correo = user.Correo,
+                            Persona = per.Nombre,
+                            Estado = per.Estado,
+                            Rol = rol.TipoUsuario,
+                            Foto = user.Fotoperfil
+                        };
+            var usuario = query.ToList().FirstOrDefault();
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                MaxDepth = 2,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase// Opcional: Ajusta el límite de profundidad según sea necesario
+            };
+
+            var json = JsonSerializer.Serialize(usuario, options);
+
+            return Content(json, "application/json");
+        }
+
         // PUT: api/Usuarios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
