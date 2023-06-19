@@ -74,7 +74,7 @@ namespace EtitcRetosAPI.Controladores
         [HttpGet("empresa/{idempresa}")]
         public async Task<ActionResult<IEnumerable<SolicitudRetoMV>>> GetSolicitudRetoEmpresa(int idempresa)
         {
-            var solicitudes = await _context.SolicitudRetos.Where(sol=>sol.Estado != "A" && sol.SolicitudExterna != null && sol.SolicitudExterna == idempresa).ToListAsync();
+            var solicitudes = await _context.SolicitudRetos.Where(sol=> sol.SolicitudExterna != null && sol.SolicitudExterna == idempresa).ToListAsync();
             var admins = await _context.Administradors.ToListAsync();
             var docentes = await _context.Docentes.ToListAsync();
             var empresas = await _context.Empresas.ToListAsync();
