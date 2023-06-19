@@ -5,10 +5,6 @@ namespace EtitcRetosAPI.Models
 {
     public partial class Reto
     {
-        public Reto()
-        {
-            Intentos = new HashSet<Intento>();
-        }
 
         public int IdReto { get; set; }
         public string? Titulo { get; set; }

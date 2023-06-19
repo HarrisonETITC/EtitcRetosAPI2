@@ -5,11 +5,6 @@ namespace EtitcRetosAPI.Models
 {
     public partial class Estudiante
     {
-        public Estudiante()
-        {
-            Intentos = new HashSet<Intento>();
-        }
-
         public int IdEstudiante { get; set; }
         public int? Semestre { get; set; }
         public int? PersonaId { get; set; }

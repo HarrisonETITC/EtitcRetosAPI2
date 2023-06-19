@@ -5,10 +5,6 @@ namespace EtitcRetosAPI.Models
 {
     public partial class Modulo
     {
-        public Modulo()
-        {
-            ModuloPermisos = new HashSet<ModuloPermiso>();
-        }
 
         public int IdModulo { get; set; }
         public string? Nombre { get; set; }

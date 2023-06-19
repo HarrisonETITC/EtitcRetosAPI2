@@ -5,11 +5,6 @@ namespace EtitcRetosAPI.Models
 {
     public partial class SolicitudReto
     {
-        public SolicitudReto()
-        {
-            Retos = new HashSet<Reto>();
-        }
-
         public int IdSolicitudReto { get; set; }
         public DateTime? FechaSolicitado { get; set; }
         public int? RevisadoPor { get; set; }

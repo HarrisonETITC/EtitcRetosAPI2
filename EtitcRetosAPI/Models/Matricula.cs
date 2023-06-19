@@ -5,10 +5,6 @@ namespace EtitcRetosAPI.Models
 {
     public partial class Matricula
     {
-        public Matricula()
-        {
-            Estudiantes = new HashSet<Estudiante>();
-        }
 
         public int IdMatricula { get; set; }
         public string? Estado { get; set; }
@@ -16,6 +12,6 @@ namespace EtitcRetosAPI.Models
         public DateTime? Vencimiento { get; set; }
         public string? Codigo { get; set; }
 
-        public virtual ICollection<Estudiante> Estudiantes { get; set; }
+        public virtual ICollection<Estudiante>? Estudiantes { get; set; }
     }
 }
