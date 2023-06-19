@@ -72,7 +72,7 @@ namespace EtitcRetosAPI.Controladores
             {
                 ReferenceHandler = ReferenceHandler.Preserve,
                 MaxDepth = 10,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase// Opcional: Ajusta el límite de profundidad según sea necesario
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
             var json = JsonSerializer.Serialize(docente, options);
